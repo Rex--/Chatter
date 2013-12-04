@@ -85,6 +85,7 @@ class Server():
 		self._socket.bind(('', self._PORT))
 		self._socket.listen(3)
 		while True:
+
 			self._client, self._address = self._socket.accept()
 			self._handler = Client_Handler(self._client, self._address)
 			self._handler.start()
@@ -100,7 +101,7 @@ class Client_Handler(threading.Thread):
 		self._address = address
 #====================================================================================
 	# main func
-	def start(self):
+	def run(self):
 		self._username = self._clientOBJ.recv(1024)
 		while Check_Availability(self._username) == False:
 			self._clientOBJ.send(Username_Taken)
