@@ -2,6 +2,8 @@ import socket
 import threading
 from Tkinter import *
 
+Username = None
+
 
 #==================================================================================================
  # gui class -- class that handles the gui and such
@@ -42,6 +44,8 @@ class gui():
 		print "Message: " + self._message.get()
 		self._messageEntry.delete(0, END)
 #================================================
+	def Get_username(self):
+		print "Not done yet but close"
  # _quit function -- takes no arguments, is called when the [x] is clicked on the gui. Makes sure everything stops gracefully
 	def _quit(self):
 		print "Stopping listener..."
@@ -50,20 +54,34 @@ class gui():
 #==================================================================================================
 
 #==================================================================================================
- # Sender class -- class to send messages to the server
-class Sender(threading.Thread):
+ # Network class -- Class that handles all network and server communication
+class Network(threading.Thread):
 #================================================
- # __init__ function -- accepts a socket object and sets everything up
+ # __init__ function -- takes a socket object as a argument and sets everything up 
 	def __init__(self, socket):
 		threading.Thread.__init__(self)
-		self._port = port
-		self._ip = ip
 		self._socket = socket
 #================================================
- # send function -- accepts a string as an argument and sends the passed string to the server
-	def send(self, message):
-		self._socket.send(message)
+ # connect function -- takes a port and ip and connects to it and works out the username situation
+	def connect(self, port, ip):
+		self._socket.connect((ip, port))
+		if Username == None:
+			Username = GUI.Get_username()
+		self._socket.send(Username)
+		wmsg = self._socket.recv(1024)
+		GUI.display(wmsg)
+#================================================
+ # loop function -- the main listening loop. Listens for messages and then displays it 
+	def loop(self):
+		while True:
+			msg = self._socket.recv(1024)
+			GUI.display(msg)
+#================================================
+ # send function -- takes a string as argument and sends it off to the server
+	def send(self, string):
+		self._socket.send(string)
 #==================================================================================================
+
 
 root = Tk()
 root.title("Chatter v0.02")
