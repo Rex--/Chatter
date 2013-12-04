@@ -7,8 +7,9 @@ import threading
 #######################
 ### Config Messages ###
 Welcome_Message = "WMSG :Welcome to v0.2 of Chatter-- a client-server relationship."
-Username_Taken  = "ERR 103 :Sorry, that username is already in use! Please try another."
+Username_Taken  = "ERR 103 :That username is already in use! Please try another."
 Unknown_Command = "ERR 100 :Unknown Command"
+Not_OP          = "ERR 102 :You don't have permsission for that."
 
 
 
