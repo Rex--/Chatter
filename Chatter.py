@@ -13,7 +13,7 @@ port = 1337
 def Evaluate(message):
 	mList = message.split()
 	if mList[0] == "MSG":
-		GUI.display(mList[1] + mList[2])
+		GUI.display(mList[1] + ":" + mList[2])
 	elif mList[0] == "PMSG":
 		GUI.display("PM: " + mList[1] + mList[2])
 	else:
@@ -59,7 +59,7 @@ class gui():
  # _Send_Message function -- takes no arguments, gets the string from the tkinter str obj and sends it to the Sender.send() function
 	def _Send_Message(self):
 		print "Message: " + self._message.get()
-		network.send("MSG " + Username + self._message.get())
+		network.send("MSG " + Username + " " + self._message.get())
 		self._messageEntry.delete(0, END)
 #================================================
  # Get_username function -- takes no arguments, opens a toplevel widget to get a username from the user
