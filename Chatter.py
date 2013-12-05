@@ -46,7 +46,7 @@ class gui():
 	def _Send_Message(self):
 		print "Message: " + self._message.get()
 		self._messageEntry.delete(0, END)
-		network.send(self._message.get())
+		network.send("MSG " + self._message.get())
 #================================================
  # Get_username function -- takes no arguments, opens a toplevel widget to get a username from the user
 	def Get_username(self):

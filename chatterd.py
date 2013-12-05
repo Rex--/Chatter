@@ -31,12 +31,13 @@ def Check_Availability(username):
 #==================================================================================================
 
 #==================================================================================================
- # Evaluate function -- Strips the command or error from the message and does what it says
-def Evaluate(user, string):
+ # Evaluate function -- takes a username, string, and socket object as arguments and evals the string and does what it needs to
+def Evaluate(user, string, sockobj):
 	mList = string.split()
 	if mList[0] == "MSG":
 		#Normal global message
 		sender.all(string)
+		print string
 	elif mList[0] == "PMSG":
 		#Private message
 		sender.private(mList[1], "PMSG" + mList[2])
@@ -56,6 +57,8 @@ def Evaluate(user, string):
 		# Message recieved when they close out of chatter
 		sender.private(user, Goodbye)
 		print "%s closed the client!" %user
+		sockobj.close()
+
 	else:
 		# unknown command
 		sender.private(user, Unknown_Command + mList[0])
@@ -118,7 +121,7 @@ class Client_Handler(threading.Thread):
 		# Main loooop!
 		while True:
 			self._message = self._clientOBJ.recv(1024)
-			Evaluate(self._username, self._message)
+			Evaluate(self._username, self._message, self._clientOBJ)
 #==================================================================================================
 
 #==================================================================================================
