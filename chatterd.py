@@ -19,7 +19,7 @@ Goodbye         = "Goodbye!"
 Online_Users   = []
 Client_Objects = []
 
-OP_List = ["Rex", "Administrator"]
+OP_List = ["Administrator"]
 
 #==================================================================================================
  # Check_Availability function -- checks if username is already in use, if it is not available returns false, if it is returns true
@@ -58,6 +58,8 @@ def Evaluate(user, string, sockobj):
 		sender.private(user, Goodbye)
 		print "%s closed the client!" %user
 		sockobj.close()
+		Online_Users.remove(user)
+		Client_Objects.remove(sockobj)
 
 	else:
 		# unknown command

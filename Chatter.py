@@ -9,6 +9,18 @@ port = 1337
 #############################################
 
 #==================================================================================================
+ # Evaluate function -- 
+def Evaluate(message):
+	mList = message.split()
+	if mList[0] == "MSG":
+		GUI.display(mList[1] + mList[2])
+	elif mList[0] == "PMSG":
+		GUI.display("PM: " + mList[1] + mList[2])
+	else:
+		GUI.display("ERROR: Unknown command: " + mList[0])
+
+
+#==================================================================================================
  # gui class -- class that handles the gui and such
 class gui():
 #================================================
@@ -45,8 +57,8 @@ class gui():
  # _Send_Message function -- takes no arguments, gets the string from the tkinter str obj and sends it to the Sender.send() function
 	def _Send_Message(self):
 		print "Message: " + self._message.get()
-		self._messageEntry.delete(0, END)
 		network.send("MSG " + self._message.get())
+		self._messageEntry.delete(0, END)
 #================================================
  # Get_username function -- takes no arguments, opens a toplevel widget to get a username from the user
 	def Get_username(self):
@@ -90,9 +102,9 @@ class Network(threading.Thread):
 #================================================
  # run function -- the main listening loop. Listens for messages and then displays it 
 	def run(self):
-		while self._loop:
+		while self._loop == True:
 			msg = self._socket.recv(1024)
-			GUI.display(msg)
+			Evaluate(msg)
 #================================================
  # send function -- takes a string as argument and sends it off to the server
 	def send(self, string):
