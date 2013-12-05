@@ -1,9 +1,12 @@
 import socket
 import threading
 from Tkinter import *
-
+#############################################
+# You may and should change these variables #
 Username = None
-
+ip = "localhost"
+port = 1337
+#############################################
 
 #==================================================================================================
  # gui class -- class that handles the gui and such
@@ -43,13 +46,25 @@ class gui():
 	def _Send_Message(self):
 		print "Message: " + self._message.get()
 		self._messageEntry.delete(0, END)
+		network.send(self._message.get())
 #================================================
+ # Get_username function -- takes no arguments, opens a toplevel widget to get a username from the user
 	def Get_username(self):
-		print "Not done yet but close"
+		self._GUbox = Toplevel()
+		self._username = StringVar()
+		self._userEntry = Entry(self._GUbox, textvariable=self._username)
+		self._userEntry.grid(row=1, column=1)
+		self._okButton = Button(self._GUbox, text='Ok', command=self._closeGU)
+		self._okButton.grid(row=1, column=2)
+		return self._username.get()
+#================================================
+ # _closeGU function -- takes no arguments, is called when the Ok button is clicked. Just destroys the toplevel widget
+	def _closeGU(self):
+		self._GUbox.destroy()
+#================================================
  # _quit function -- takes no arguments, is called when the [x] is clicked on the gui. Makes sure everything stops gracefully
 	def _quit(self):
-		print "Stopping listener..."
-		print "Stopping Sender..."
+		network.stop()
 		self._master.destroy()
 #==================================================================================================
 
@@ -57,32 +72,41 @@ class gui():
  # Network class -- Class that handles all network and server communication
 class Network(threading.Thread):
 #================================================
- # __init__ function -- takes a socket object as a argument and sets everything up 
+ # __init__ function -- takes a TCP! socket object as a argument and sets everything up 
 	def __init__(self, socket):
 		threading.Thread.__init__(self)
 		self._socket = socket
+		self._loop = True
+
 #================================================
  # connect function -- takes a port and ip and connects to it and works out the username situation
-	def connect(self, port, ip):
+	def connect(self, port, ip, username):
 		self._socket.connect((ip, port))
-		if Username == None:
-			Username = GUI.Get_username()
-		self._socket.send(Username)
+		if username == None:
+			username = GUI.Get_username()
+		self._socket.send(username)
 		wmsg = self._socket.recv(1024)
 		GUI.display(wmsg)
 #================================================
- # loop function -- the main listening loop. Listens for messages and then displays it 
-	def loop(self):
-		while True:
+ # run function -- the main listening loop. Listens for messages and then displays it 
+	def run(self):
+		while self._loop:
 			msg = self._socket.recv(1024)
 			GUI.display(msg)
 #================================================
  # send function -- takes a string as argument and sends it off to the server
 	def send(self, string):
 		self._socket.send(string)
+#================================================
+ # stop function -- takes no arguments, when called it sets loop to false making the loop quit on the next ?loop?
+	def stop(self):
+		self._loop = False
 #==================================================================================================
 
-
+socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+network = Network(socket)
+network.connect(port, ip, Username)
+network.start()
 root = Tk()
 root.title("Chatter v0.02")
 GUI = gui(root)
