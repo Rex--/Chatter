@@ -3,7 +3,7 @@ import threading
 from Tkinter import *
 #############################################
 # You may and should change these variables #
-Username = None
+Username = "Rex"
 ip = "localhost"
 port = 1337
 #############################################
@@ -64,6 +64,7 @@ class gui():
 #================================================
  # _quit function -- takes no arguments, is called when the [x] is clicked on the gui. Makes sure everything stops gracefully
 	def _quit(self):
+		network.send("QUIT")
 		network.stop()
 		self._master.destroy()
 #==================================================================================================
@@ -77,7 +78,6 @@ class Network(threading.Thread):
 		threading.Thread.__init__(self)
 		self._socket = socket
 		self._loop = True
-
 #================================================
  # connect function -- takes a port and ip and connects to it and works out the username situation
 	def connect(self, port, ip, username):
@@ -101,13 +101,19 @@ class Network(threading.Thread):
  # stop function -- takes no arguments, when called it sets loop to false making the loop quit on the next ?loop?
 	def stop(self):
 		self._loop = False
+		self._socket.close()
 #==================================================================================================
 
 socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 network = Network(socket)
-network.connect(port, ip, Username)
-network.start()
 root = Tk()
-root.title("Chatter v0.02")
 GUI = gui(root)
+print "Connecting to %s on port %i with username %s" %(ip, port, Username)
+network.connect(port, ip, Username)
+print "..connected."
+print "Starting main listening loop..."
+network.start()
+print "...started."
+root.title("Chatter v0.02")
+print "Starting gui.."
 root.mainloop()
