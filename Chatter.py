@@ -18,7 +18,7 @@ def Evaluate(message):
 		GUI.display("PM: " + mList[1] + mList[2])
 	else:
 		GUI.display("ERROR: Unknown command: " + mList[0])
-
+#==================================================================================================
 
 #==================================================================================================
  # gui class -- class that handles the gui and such
@@ -28,6 +28,8 @@ class gui():
 	def __init__(self, root):
 		self._master = root
 		grid = Grid()
+
+		global Username
 
 		# So when the [x] is pressed I can close my shit too
 		self._master.protocol("WM_DELETE_WINDOW", self._quit)
@@ -57,7 +59,7 @@ class gui():
  # _Send_Message function -- takes no arguments, gets the string from the tkinter str obj and sends it to the Sender.send() function
 	def _Send_Message(self):
 		print "Message: " + self._message.get()
-		network.send("MSG " + self._message.get())
+		network.send("MSG " + Username + self._message.get())
 		self._messageEntry.delete(0, END)
 #================================================
  # Get_username function -- takes no arguments, opens a toplevel widget to get a username from the user
