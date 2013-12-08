@@ -3,7 +3,7 @@ import threading
 from Tkinter import *
 #############################################
 # You may and should change these variables #
-Username = None
+Username = "Rex"
 ip = "localhost"
 port = 1337
 #############################################
@@ -81,6 +81,7 @@ class gui():
 #================================================
  # Get_username function -- takes no arguments, opens a toplevel widget to get a username from the user
 	def Get_username(self):
+		print "Get_username function"
 		self._GUbox = Toplevel()
 		self._username = StringVar()
 		self._userEntry = Entry(self._GUbox, textvariable=self._username)
@@ -104,6 +105,7 @@ class gui():
 		try:
 			network.send("QUIT")
 			network.stop()
+			system.exit(0)
 		except:
 			pass
 		self._master.destroy()
@@ -121,6 +123,7 @@ class Network(threading.Thread):
 #================================================
  # connect function -- takes a port and ip and connects to it and works out the username situation
 	def connect(self, port, ip, username):
+		print "connect function"
 		self._socket.connect((ip, port))
 		if username == None:
 			username = GUI.Get_username()
@@ -130,6 +133,7 @@ class Network(threading.Thread):
 #================================================
  # run function -- the main listening loop. Listens for messages and then displays it 
 	def run(self):
+		print "run function in class Network"
 		while self._loop == True:
 			msg = self._socket.recv(1024)
 			Evaluate(msg)
