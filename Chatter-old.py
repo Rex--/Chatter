@@ -105,7 +105,6 @@ class gui():
 		try:
 			network.send("QUIT")
 			network.stop()
-			system.exit(0)
 		except:
 			pass
 		self._master.destroy()

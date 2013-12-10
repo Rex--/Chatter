@@ -33,24 +33,24 @@ def Check_Availability(username):
 #==================================================================================================
  # Evaluate function -- takes a username, string, and socket object as arguments and evals the string and does what it needs to
 def Evaluate(user, string, sockobj):
-	mList = string.split()
+ mList = string.split()
 	if mList[0] == "MSG":
 		#Normal global message
 		sender.all(string)
 		print string
 	elif mList[0] == "PMSG":
 		#Private message
-		sender.private(mList[1], "PMSG" + mList[2])
+		sender.private mList[1], "PMSG" + mList[2])
 	elif mList[0] == "BAN":
 		# Ban a user forever(Or until they get smart ;)
-		sender.private(mList[1], "BAN" + mList[2])
+		sender.private mList[1], "BAN" + mList[2])
 	elif mList[0] == "KICK":
 		# Kick a user. They can reconnect immediatly
-		sender.private(mList[1], "KICK" + mList[2])
+		sender.private mList[1], "KICK" + mList[2])
 	elif mList[0] == "OP":
 		# Promotes a user to operator status
 		if CheckOP(user):
-			OP_List.append(mList[1])
+			OP_List.append mList[1])
 		else:
 			sender.private(user, Not_OP)
 	elif mList[0] == "QUIT":
