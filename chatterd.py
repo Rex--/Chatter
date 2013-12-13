@@ -63,12 +63,13 @@ class Client_Handler(threading.Thread):         #
 		self._username = self._clientobj.recv(1024)
 		if Allow_duplicate_usernames == False:
 			while Check_Availability(self._username) == False:
-				self._clientobj.send("Sorry, that username is already taken.")
+				self._clientobj.send("1")
 				self._username = self._clientobj.recv(1024)
+		sender.all(self._username + " joined the channel.")
 		Online_Users.append(self._username)
 		Client_Objects.append(self._clientobj)
+		self._clientobj.send("0")
 		self._clientobj.send(Welcome_message)
-		sender.all(self._username + " joined the channel.")
 		while True:
 			self._message = self._clientobj.recv(1024)
 			Evaluate(self._username, self._message, self._clientobj)
