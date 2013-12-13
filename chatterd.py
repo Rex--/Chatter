@@ -86,6 +86,8 @@ def Evaluate(username, message, clientobj):
 		sender.private(mList[2], msg)
 	elif mList[0] == "QUIT":
 		sender.all(username + " left the channel.")
+		Online_Users.remove(username)
+		Client_Objects.remove(clientobj)
 	else:
 		sender.all(username + ":" + message)
 #================================================
